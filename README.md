@@ -1,81 +1,126 @@
 # Python functional code snippet
 
-常用的python功能性代码片段
-
-
+常用的 python 功能性代码片段
 
 ## 1. 日志相关
 
+### print 函数
 
+#### 1. 使用 print("string", file="")实现
 
-### print函数
-
-
-
-#### 1. 使用print("string", file="")实现
-
-先使用with上下文以及open函数打开一个文件句柄，然后在使用print函数时将输出流重定向到之前的句柄文件。
+先使用 with 上下文以及 open 函数打开一个文件句柄，然后在使用 print 函数时将输出流重定向到之前的句柄文件。
 
 [具体实现](./log/print_file.py)
 
-
-
 #### 2. 通过修改标准输出流实现（sys）
 
-先使用with上下文以及open函数打开一个文件句柄，然后通过sys模块将系统的标准输出重定向到之前的句柄文件，之后print打印的东西都会重定向到文件中，使用完成后不要忘了将系统的标准输出复原。
+先使用 with 上下文以及 open 函数打开一个文件句柄，然后通过 sys 模块将系统的标准输出重定向到之前的句柄文件，之后 print 打印的东西都会重定向到文件中，使用完成后不要忘了将系统的标准输出复原。
 
 [具体实现](./log/sys_stdout.py)
 
-
-
 ## 2. 文件操作
 
+### 1. 输出大文件的前几行
 
-
-#### 1. 输出大文件的前几行
-
-先使用with上下文以及open函数打开一个文件句柄，使用文件句柄的readlines方法，然后将得到的可迭代对象进行迭代在
+先使用 with 上下文以及 open 函数打开一个文件句柄，使用文件句柄的 readlines 方法，然后将得到的可迭代对象进行迭代在
 
 [具体实现](./file/head_file.py)
 
-
-
 ## 3. 对象占用的内存空间
 
-使用sys模块的getsizeof()方法，查看一个对象所占用的内存空间
+使用 sys 模块的 getsizeof()方法，查看一个对象所占用的内存空间
 
 [具体实现](./memory/object_of_memory_size.py)
 
-
-
 ## 4. 字符串的拼接
 
-#### 1. 来自C语言的`%`方式
+### 1. 来自 C 语言的`%`方式
 
-％号格式化字符串的方式继承自古老的C语言，这在很多编程语言都有类似的实现。`%s`是一个占位符，它仅代表一段字符串，并不是拼接的实际内容。实际的拼接内容在一个单独的%号后面，放在一个元组中。
+％号格式化字符串的方式继承自古老的 C 语言，这在很多编程语言都有类似的实现。`%s`是一个占位符，它仅代表一段字符串，并不是拼接的实际内容。实际的拼接内容在一个单独的%号后面，放在一个元组中。
 
 类似的占位符还有：%d（整数）、%f（浮点数）、%x（十六进制数）...
 
+### 2. format()拼接方式
 
+这种方式是使用花括号｛｝做占位符，在 format 方法中再传入实际的拼接值。容易看出，它实际上是对%号拼接方式的改进，这种方式在 python2.6 中开始引入。
 
-#### 2. format()拼接方式
+### 3. （）类似元组方式
 
-这种方式是使用花括号｛｝做占位符，在format方法中再传入实际的拼接值。容易看出，它实际上是对%号拼接方式的改进，这种方式在python2.6中开始引入。
+### 4. 面向对象模版拼接
 
-#### 3. （）类似元组方式
+### 5. 常用的+号拼接
 
-#### 4. 面向对象模版拼接
+### 6. join()拼接方式
 
-#### 5. 常用的+号拼接
+str 对象自带的 join()方法，接受一个序列参数，可以实现拼接。拼接时，元素若不是字符串，需要先转换一下。可以看出，这种方法比较适用与连接序列对象中（例如列表）的元素，并设置统一的间隔符。
 
-#### 6. join()拼接方式
+当拼接长度超过 20 时，这种方式基本上是首选。不过，它的缺点就是：不适合进行零散片段的、不处于序列集合的元素拼接。
 
-str对象自带的join()方法，接受一个序列参数，可以实现拼接。拼接时，元素若不是字符串，需要先转换一下。可以看出，这种方法比较适用与连接序列对象中（例如列表）的元素，并设置统一的间隔符。
+### 7. f-string 方式
 
-当拼接长度超过20时，这种方式基本上是首选。不过，它的缺点就是：不适合进行零散片段的、不处于序列集合的元素拼接。
-
-#### 7.  f-string方式
-
-f-string方式出自PEP 498（Literal String Interpolation，字面字符串插值）
+f-string 方式出自 PEP 498（Literal String Interpolation，字面字符串插值）
 
 https://kandianshare.html5.qq.com/v2/news/2669455806451996994?url=http%3A%2F%2Fkuaibao.qq.com%2Fs%2F20200328A0P72100&cardmode=1&dataSrc=96&docId=2669455806451996994&pid=45&queryId=1585447886181&sh_sid=5__21570c683d3cb00e__b17b121e58985d2f0b41567f1d3188cb&subjectId=1090319&zimeitiId=qeh_5408094&target_app=kb#
+
+
+## Python调用其他语言的库
+
+### 调用C库
+
+Python中的`ctypes`模块提供了和C语言兼容的数据类型和函数来加载DLL文件，因此在调用时不需对源文件做任何的修改。
+
+#### 将C文件编译为动态链接库文件
+
+在linux和MAC下面为`.so`文件，windows为`.dll`文件
+
+```shell
+# Linux
+$ gcc -shared -Wl,-soname,adder -o adder.so -fPIC add.c
+# Mac
+$ gcc -shared -Wl,-install_name,adder.so -o adder.so -fPIC add.c
+# Windows
+$ gcc -shared -Wl,-soname,adder -o adder.dll -fPIC add.c
+```
+
+在这个例子中，C文件时自解释的，它包含两个函数，分别实现了整型求和和浮点型求和。
+
+```c
+// sample C file to add 2 numbers - int and float
+#include <stdio.h>
+
+int add_int(int, int);
+float add_float(float, float);
+
+int add_int(int num1, int num2)
+{
+    return num1 + num2;
+}
+
+float add_float(float num1, float num2)
+{
+    return num1 + num2;
+}
+```
+
+在python文件中，一开始先导入ctypes模块，然后使用CDLL函数来加载我们创建的库文件。这样我们就可以通过变量adder来使用C类库中的函数了。当adder.add_int()被调用时，内部将发起一个对C函数add_int的调用。ctypes接口允许我们在调用C函数时使用原生Python中默认的字符串型和整型。
+
+```python
+from ctypes import *
+
+#load the shared object file
+adder = CDLL('./c/adder.so')
+
+# Find sum of integers
+res_int = adder.add_int(4, 5)
+print('Sum of 4 and 5 = ' + str(res_int))
+
+# Find sum of floats
+a = c_float(5.5)
+b = c_float(4.1)
+
+add_float = adder.add_float
+add_float.restype = c_float
+print('Sum of 5.5 and 4.1 = ' + str(add_float(a, b)))
+```
+
+而对于其他类似布尔型和浮点型这样的类型，必须要使用正确的ctypes类型才可以。如向adder.add_float()函数传参时，我们要先将python中的十进制值转化为c_float类型，然后才能传送给C函数。这种方法虽然简单，清晰，但是却很受限。例如，并不能在C中对对象进行操作。
