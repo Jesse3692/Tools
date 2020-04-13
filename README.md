@@ -142,3 +142,56 @@ print('Sum of 5.5 and 4.1 = ' + str(add_float(a, b)))
 
 ### bcrypt函数
 
+bcrypt是基于Blowfish密码涉及的密码哈希功能。bcrypt函数是OpenBSD的默认密码哈希算法。有针对C，C++，C#，Java，JavaScript，PHP，Python和其他语言的bcrypt实现。
+
+bcrypt算法使用强大的加密技术为我们创建哈希并加盐。该算法的计算成本是参数化的，因此随着计算机变得越来越快，它可能会增加。计算成本被成为工作因子或成本因子。它减慢了散列的速度，使暴力破解的尝试越来越难。随着计算机变得越来越快，最佳成本因数会随着时间而变化。高成本因素的缺点是增加了系统资源的负载并影响了用户体验。
+
+### Python bcrypt创建哈希密码
+
+使用bcrypt创建一个salt和hash密码
+
+```python
+import bcrypt
+
+passwd = b's@cret123'
+
+salt = bcrypt.gensalt()  # 生成盐
+hashed = bcrypt.hashpw(passwd, salt)  # 生成hash值
+```
+
+请注意，盐是生成的哈希值的第一部分。还要注意，每次生成的唯一的salt和hash值。
+
+使用bcrypt检查密码
+
+```python
+import bcrypt
+
+passwd = b's@cret123'
+
+salt = bcrypt.gensalt()  # 生成盐
+hashed = bcrypt.hashpw(passwd, salt)
+
+if bcrypt.checkpw(passwd, hashed): # 检查密码
+    print('match')
+else:
+    print('not match')
+```
+
+bcrypt成本因子
+
+成本因子通过减慢散列来提高安全性。
+
+```python
+import time
+import bcrypt
+
+start = time.time()
+
+password = b'@scret123'
+salt = bcrypt.gensalt(rounds=17)  # 设置成本因子
+hashed = bcrypt.hashpw(password, salt)
+end = time.time()
+
+print(end - start)
+print(hashed)
+```
