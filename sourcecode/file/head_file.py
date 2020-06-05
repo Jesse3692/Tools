@@ -1,5 +1,5 @@
 import os        
-os.chdir("./log")   
+os.chdir("./sourcecode/log")   
 k=50     
 with open("hello.txt") as f: # f -> <class '_io.TextIOWrapper'>  用来处理文本输入输出操作的类。
     n=0
